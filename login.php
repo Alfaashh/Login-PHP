@@ -14,6 +14,9 @@
             if (isset($_GET['success'])) {
                 echo '<div class="success-message">Registrasi berhasil! Silakan login.</div>';
             }
+            if (isset($_GET['success-logout'])) {
+                echo '<div class="success-message">Anda telah berhasil logout.</div>';
+            }
             if (isset($error)) {
                 echo '<div class="error-message">' . $error . '</div>';
             }
