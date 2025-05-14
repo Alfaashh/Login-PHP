@@ -1,47 +1,44 @@
 <?php
-
-    // buat perilaku ketika salah username atau password
-    // buat perilaku ketika username tidak ditemukan
-    // buat perilaku ketika password salah
-    // buat perilaku ketika login berhasil
-    // buat perilaku ketika login gagal
-    // buat perilaku ketika login berhasil 
-    
 session_start();
 require_once 'config.php';
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = trim($_POST['username']);
+    $password = trim($_POST['password']);
 
+    // buat perilaku ketika username tidak ditemukan
+    $query = "SELECT * FROM users WHERE username = ?";
+    $stmt = $conn->prepare($query);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    $sql = "SELECT * FROM users WHERE username = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "s", $username);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if (mysqli_num_rows($result) > 0) {
-        $user = mysqli_fetch_assoc($result);
-
-        if (md5($password) === $user['password']) {
-
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        $_SESSION['role'] = $user['role'];
-
-
-        header("Location: ../dashboard.php");
-        exit;
-        } else {
-
-            $error = "Password salah";
-        }
-    } else {
-        $error = "Username tidak ditemukan";
+    if ($result->num_rows === 0) {
+        $_SESSION['error'] = "Username tidak ditemukan!";
+        header("Location: ../tugas-login-register/login.php");
+        exit();
     }
 
-    header("Location: ../login.php?error=" . urlencode($error));
-    exit;
+    // buat perilaku ketika username ditemukan
+    $user = $result->fetch_assoc();
+
+    // buat perilaku ketika password salah
+    if (md5($password) !== $user['password']) {
+        $_SESSION['error'] = "Password salah!";
+        header("Location: ../tugas-login-register/login.php");
+        exit();
+    }
+
+    // buat Perilaku ketika login berhasil
+    $_SESSION['user_id'] = $user['id'];
+    $_SESSION['username'] = $user['username'];
+    $_SESSION['role'] = $user['role'];
+    header("Location: ../tugas-login-register/dashboard.php");
+    exit();
+} else {
+    // Perilaku ketika request method tidak valid
+    $_SESSION['error'] = "Permintaan tidak valid!";
+    header("Location: ../tugas-login-register/login.php");
+    exit();
 }
-?> 
+?>
