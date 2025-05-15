@@ -24,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $update = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
         $update->bind_param("si", $newPass, $userId);
         if ($update->execute()) {
-            $success = "Password berhasil diubah!";
+            header("Location: dashboard.php);
+            exit();
         } else {
             $error = "Gagal mengubah password!";
         }
