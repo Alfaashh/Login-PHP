@@ -1,12 +1,7 @@
 <?php
 session_start();
 require_once 'includes/config.php';
-
-// Cek apakah user sudah login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit;
-}
+require_once 'auth_check.php';
 
 $userId = $_SESSION['user_id'];
 

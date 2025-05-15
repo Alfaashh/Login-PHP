@@ -1,11 +1,7 @@
 <?php
 session_start();
 
-// Cek apakah user sudah login
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
+require_once 'auth_check.php';
 
 // Ambil data user dari session
 $username = $_SESSION['username'];
