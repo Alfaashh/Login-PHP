@@ -24,7 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $update = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
         $update->bind_param("si", $newPass, $userId);
         if ($update->execute()) {
-            header("Location: dashboard.php);
+            // Redirect langsung ke dashboard setelah berhasil ubah password
+            header("Location: dashboard.php");
             exit();
         } else {
             $error = "Gagal mengubah password!";
@@ -48,9 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         <h2>Ubah Password</h2>
 
         <?php if ($success): ?>
-            <div class="success-message"><?= $success ?></div>
+            <div class="success-message"><?= htmlspecialchars($success) ?></div>
         <?php elseif ($error): ?>
-            <div class="error-message"><?= $error ?></div>
+            <div class="error-message"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
         <form method="post" action="">
