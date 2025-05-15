@@ -4,7 +4,7 @@
 $host = "localhost";
 $username = "root";
 $password = "";
-$database = "tugasloginregister";
+$database = "tugas_login_register";
 
 // Membuat koneksi
 $conn = mysqli_connect($host, $username, $password, $database);
