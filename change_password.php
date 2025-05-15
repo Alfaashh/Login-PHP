@@ -59,9 +59,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 <input type="password" name="new_password" required>
             </div>
             <button type="submit" class="btn">Simpan</button>
-            <div class="btn-secondary">
-                <a href="dashboard.php">Kembali ke Dashboard</a>
-            </div>
         </form>
     </div>
 </div>
