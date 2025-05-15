@@ -33,7 +33,7 @@ session_start();
                 </div>
                 <button type="submit" class="btn">Login</button>
             </form>
-            <p class="register-link">Belum punya akun? <a href="/PraktikumPHP/PHP1/register.php">Daftar di sini</a></p>
+            <p class="register-link">Belum punya akun? <a href="register.php">Daftar di sini</a></p>
         </div>
     </div>
 </body>

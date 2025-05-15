@@ -18,14 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows > 0) {
         $_SESSION['error'] = "Username sudah digunakan!";
-        header("Location: ../tugas-login-register/register.php");
+        header("Location: ../register.php");
         exit();
     }
 
     // buat perilaku ketika password tidak sama
     if ($password !== $confirm_password) {
         $_SESSION['error'] = "Password tidak cocok!";
-        header("Location: ../tugas-login-register/register.php");
+        header("Location: ../register.php");
         exit();
     }
 
@@ -38,11 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($stmt->execute()) {
         $_SESSION['success'] = "Registrasi berhasil! Silakan login.";
-        header("Location: ../tugas-login-register/login.php");
+        header("Location: ../login.php");
         exit();
     } else {
         $_SESSION['error'] = "Terjadi kesalahan saat registrasi. Silakan coba lagi.";
-        header("Location: ../tugas-login-register/register.php");
+        header("Location: ../register.php");
         exit();
     }
 }

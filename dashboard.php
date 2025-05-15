@@ -92,7 +92,7 @@ $isAdmin = ($role === 'admin');
             </div>
             <?php endif; ?>
 
-            <a href="../tugas-login-register/logout.php" class="logout-btn">Logout</a>
+            <a href="logout.php" class="logout-btn">Logout</a>
         </div>
     </div>
 </body>

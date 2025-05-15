@@ -38,7 +38,7 @@ session_start();
                 </div>
                 <button type="submit" class="btn">Daftar</button>
             </form>
-            <p class="login-link">Sudah punya akun? <a href="../tugas-login-register/login.php">Login di sini</a></p>
+            <p class="login-link">Sudah punya akun? <a href="login.php">Login di sini</a></p>
         </div>
     </div>
 </body>

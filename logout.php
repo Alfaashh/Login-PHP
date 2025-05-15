@@ -6,6 +6,6 @@ session_unset();
 
 session_destroy();
 
-header("Location: ../tugas-login-register/login.php?success-logout=logout");
+header("Location: login.php?success-logout=logout");
 exit;
 ?> 

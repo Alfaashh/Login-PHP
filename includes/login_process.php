@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result->num_rows === 0) {
         $_SESSION['error'] = "Username tidak ditemukan!";
-        header("Location: ../tugas-login-register/login.php");
+        header("Location: ../login.php");
         exit();
     }
 
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // buat perilaku ketika password salah
     if (md5($password) !== $user['password']) {
         $_SESSION['error'] = "Password salah!";
-        header("Location: ../tugas-login-register/login.php");
+        header("Location: ../login.php");
         exit();
     }
 
@@ -33,12 +33,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['role'] = $user['role'];
-    header("Location: ../tugas-login-register/dashboard.php");
+    header("Location: ../dashboard.php");
     exit();
 } else {
     // Perilaku ketika request method tidak valid
     $_SESSION['error'] = "Permintaan tidak valid!";
-    header("Location: ../tugas-login-register/login.php");
+    header("Location: ../login.php");
     exit();
 }
 ?>
