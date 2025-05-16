@@ -39,15 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Check password length against settings
-    $min_length = 6; // Default minimum length
-    $length_query = $conn->query("SELECT setting_value FROM settings WHERE setting_name = 'min_password_length' LIMIT 1");
-    if ($length_query && $length_query->num_rows > 0) {
-        $length_row = $length_query->fetch_assoc();
-        $min_length = intval($length_row['setting_value']);
+    $min_length = 6; // nilai default
+
+    if ($conn->query("SHOW TABLES LIKE 'settings'")->num_rows > 0) {
+        $length_query = $conn->query("SELECT setting_value FROM settings WHERE setting_name = 'min_password_length' LIMIT 1");
+        if ($length_query && $length_query->num_rows > 0) {
+            $length_row = $length_query->fetch_assoc();
+            $min_length = intval($length_row['setting_value']);
+        }
     }
 
+
     if (strlen($password) < $min_length) {
-        // Log failed registration
         logActivity($conn, 0, $username, 'register', 'failed', "Password kurang dari $min_length karakter");
         
         $_SESSION['error'] = "Password harus minimal $min_length karakter!";

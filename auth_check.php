@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-//Durasi timeout 30 menit
-$timeout_duration = 2100;
+//Durasi timeout 
+$timeout_duration = 1800;
 
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeout_duration) {
     session_unset();
