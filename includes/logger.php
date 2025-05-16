@@ -16,8 +16,7 @@ function ensureLogsTableExists($conn) {
             user_id INT,
             username VARCHAR(50),
             action VARCHAR(100) NOT NULL,
-            status VARCHAR(20) NOT NULL,
-            ip_address VARCHAR(45) NOT NULL,
+            status VARCHAR(20) NOT NULL,    
             details TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )";
