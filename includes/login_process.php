@@ -1,6 +1,9 @@
 <?php
 session_start();
 require_once 'config.php';
+require_once 'logger.php';
+
+ensureLogsTableExists($conn);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -14,6 +17,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $result = $stmt->get_result();
 
     if ($result->num_rows === 0) {
+        // Log failed login attempt
+        logActivity($conn, 0, $username, 'login', 'failed', 'Username tidak ditemukan');
+        
         $_SESSION['error'] = "Username tidak ditemukan!";
         header("Location: ../login.php");
         exit();
@@ -24,6 +30,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // buat perilaku ketika password salah
     if (md5($password) !== $user['password']) {
+        // Log failed login attempt
+        logActivity($conn, $user['id'], $user['username'], 'login', 'failed', 'Password salah');
+        
         $_SESSION['error'] = "Password salah!";
         header("Location: ../login.php");
         exit();
@@ -33,10 +42,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $_SESSION['user_id'] = $user['id'];
     $_SESSION['username'] = $user['username'];
     $_SESSION['role'] = $user['role'];
+    
+    // Log successful login
+    logActivity($conn, $user['id'], $user['username'], 'login', 'success', 'Login berhasil');
+    
     header("Location: ../dashboard.php");
     exit();
 } else {
     // Perilaku ketika request method tidak valid
+    logActivity($conn, 0, 'unknown', 'login', 'failed', 'Metode request tidak valid');
+    
     $_SESSION['error'] = "Permintaan tidak valid!";
     header("Location: ../login.php");
     exit();

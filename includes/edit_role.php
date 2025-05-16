@@ -1,6 +1,9 @@
 <?php
 require_once 'config.php';
+require_once 'logger.php';
 require_once '../auth_check.php';
+
+ensureLogsTableExists($conn);
 
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../login.php");
@@ -13,7 +16,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $newRole = $_POST['role'];
     $stmt = $conn->prepare("UPDATE users SET role=? WHERE id=?");
     $stmt->bind_param("si", $newRole, $id);
-    $stmt->execute();
+    
+    if ($stmt->execute()) {
+        // Get username for logging
+        $user_stmt = $conn->prepare("SELECT username FROM users WHERE id=?");
+        $user_stmt->bind_param("i", $id);
+        $user_stmt->execute();
+        $user_result = $user_stmt->get_result();
+        $user = $user_result->fetch_assoc();
+        $username = $user ? $user['username'] : 'unknown';
+
+        // Log role change
+        logActivity($conn, $_SESSION['user_id'], $_SESSION['username'], 'change_role', 'success', "Mengubah role pengguna $username (ID: $id) menjadi $newRole");
+    } else {
+        // Log failed role change
+        logActivity($conn, $_SESSION['user_id'], $_SESSION['username'], 'change_role', 'failed', "Gagal mengubah role pengguna (ID: $id). Error: " . $conn->error);
+    }
+    
     header("Location: ../manage_user.php");
     exit;
 }

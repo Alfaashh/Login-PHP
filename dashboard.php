@@ -75,8 +75,8 @@ $isAdmin = ($role === 'admin');
             <div class="admin-panel">
                 <h3>Admin Panel</h3>
                 <a href="manage_user.php" class="admin-btn">Kelola User</a>
-                <a href="#" class="admin-btn">Lihat Log</a>
-                <a href="#" class="admin-btn">Pengaturan</a>
+                <a href="log_activity.php" class="admin-btn">Lihat Log</a>
+                <a href="pengaturan.php" class="admin-btn">Pengaturan</a>
             </div>
             <?php else: ?>
             <div class="user-panel">
@@ -90,4 +90,4 @@ $isAdmin = ($role === 'admin');
         </div>
     </div>
 </body>
-</html> 
+</html>

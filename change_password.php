@@ -1,6 +1,9 @@
 <?php
-require_once 'includes\config.php';
+require_once 'includes/config.php';
+require_once 'includes/logger.php';
 require_once 'auth_check.php';
+
+ensureLogsTableExists($conn);
 
 $userId = $_SESSION['user_id'];
 $success = $error = "";
@@ -19,13 +22,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $update = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
         $update->bind_param("si", $newPass, $userId);
         if ($update->execute()) {
+            // Log password change
+            logActivity($conn, $userId, $_SESSION['username'], 'change_password', 'success', 'Password berhasil diubah');
+            
             // Redirect langsung ke dashboard setelah berhasil ubah password
             header("Location: dashboard.php");
             exit();
         } else {
+            // Log failed password change
+            logActivity($conn, $userId, $_SESSION['username'], 'change_password', 'failed', 'Gagal mengubah password: ' . $conn->error);
+            
             $error = "Gagal mengubah password!";
         }
     } else {
+        // Log failed password change
+        logActivity($conn, $userId, $_SESSION['username'], 'change_password', 'failed', 'Password lama tidak sesuai');
+        
         $error = "Password lama tidak sesuai!";
     }
 }
