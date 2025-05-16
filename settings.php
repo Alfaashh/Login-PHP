@@ -1,8 +1,7 @@
 <?php
-
 require_once 'auth_check.php';
 
-// Check admin role
+// Cek role admin
 if ($_SESSION['role'] !== 'admin') {
     header('Location: dashboard.php');
     exit();
@@ -10,12 +9,12 @@ if ($_SESSION['role'] !== 'admin') {
 
 $message = '';
 
-// Process form submission
+// Proses form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $timeout = filter_input(INPUT_POST, 'session_timeout', FILTER_VALIDATE_INT);
     
     if ($timeout && $timeout >= 1) {
-        // Update timeout in auth_check.php
+        // Update timeout di auth_check.php
         $config_content = file_get_contents('auth_check.php');
         $new_content = preg_replace(
             '/\$timeout_duration = \d+;/', 
@@ -24,19 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         );
         
         if (file_put_contents('auth_check.php', $new_content)) {
-            $message = '<div class="success-message">Session timeout has been updated successfully!</div>';
+            $message = '<div class="success-message">Pengaturan timeout berhasil diperbarui!</div>';
         } else {
-            $message = '<div class="error-message">Failed to update settings!</div>';
+            $message = '<div class="error-message">Gagal memperbarui pengaturan!</div>';
         }
     } else {
-        $message = '<div class="error-message">Invalid timeout value!</div>';
+        $message = '<div class="error-message">Nilai timeout tidak valid!</div>';
     }
 }
 
-// Get current timeout value
+// Ambil nilai timeout saat ini
 $config_content = file_get_contents('auth_check.php');
 preg_match('/\$timeout_duration = (\d+);/', $config_content, $matches);
-$current_timeout = isset($matches[1]) ? intval($matches[1]) / 60 : 30; // Convert seconds to minutes
+$current_timeout = isset($matches[1]) ? intval($matches[1]) / 60 : 30; // Konversi detik ke menit
 ?>
 
 <!DOCTYPE html>
@@ -44,32 +43,31 @@ $current_timeout = isset($matches[1]) ? intval($matches[1]) / 60 : 30; // Conver
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Settings</title>
+    <title>Pengaturan</title>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div class="container">
         <div class="form-container">
-            <h2>System Settings</h2>
+            <h2>Pengaturan Sistem</h2>
             
             <?php echo $message; ?>
             
             <form method="POST" action="">
                 <div class="form-group">
-                    <label>Session Timeout (minutes)</label>
+                    <label>Session Timeout (menit)</label>
                     <input type="number" 
                            name="session_timeout" 
                            value="<?php echo htmlspecialchars($current_timeout); ?>" 
-                           min="1"
-                           class="form-control">
-                    <small>Current timeout: <?php echo htmlspecialchars($current_timeout); ?> minutes</small>
+                           min="1">
+                    <small>Timeout saat ini: <?php echo htmlspecialchars($current_timeout); ?> menit</small>
                 </div>
                 
-                <button type="submit" class="btn">Save Settings</button>
+                <button type="submit" class="btn">Simpan Pengaturan</button>
             </form>
             
             <div class="btn-secondary">
-                <a href="dashboard.php">Back to Dashboard</a>
+                <a href="dashboard.php">Kembali ke Dashboard</a>
             </div>
         </div>
     </div>

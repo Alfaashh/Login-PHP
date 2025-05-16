@@ -202,11 +202,13 @@ tr:hover {
   text-decoration: none;
   border-radius: 8px;
   transition: background-color 0.3s, transform 0.2s;
+  display: inline-block;
 }
 
 .btn-secondary a:hover {
   background-color: #3d8b40;  
   transform: scale(1.02);
+  color: white !important;
 }
 
 .btn-action {
